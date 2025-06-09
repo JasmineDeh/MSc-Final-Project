@@ -10,8 +10,6 @@ st.set_page_config(
 st.title("Welcome to Stage 2 of this study!")
 st.write("welcome paragraph quick run through what to expect. point towards ID generator. Make note of ID number for final survey.")
 
-st.subheader("ID Generator")
-
 
 if "ID" not in st.session_state:
     st.session_state["ID"] = random.randint(1,1000000)
@@ -22,10 +20,10 @@ if "number" not in st.session_state:
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
-st.write(f"Your generated ID: {st.session_state.ID}")
+st.subheader(f"Your personal ID: {st.session_state.ID}")
 
 with st.form("ID_form"):
-    ID_input = st.text_area("Enter Random ID Here")
+    ID_input = st.text_area("Enter Personal ID Here")
     submitted = st.form_submit_button(label="Submit")
     
     if submitted:
