@@ -9,7 +9,7 @@ import time
 def main():
     st.title("Coding Tasks")
 
-##################################### Global Variables #################################
+##################################### Variables #################################
 
     # Generating DataFrame required for tasks.
     df = pd.DataFrame(
@@ -53,8 +53,21 @@ def main():
         st.subheader("Introduction")
         # Tasks introductory information shown to participants.
         st.write("""
-        Introduce participants to this stage of the study. Explain conditions of task: 1. The use of any external tools is strictly prohibited / Use AI as you please. 2. You will be timed but complete the task like you normally would. 3. Task 2 will become available once task 1 is complete, take a break between tasks if you wish. 4. once you click on task 1 tab the timer will start, it will not stop until submit is hit, the same applies for task 2, please still take as long as you need to in each task.
+        In this activity, you will complete **two short Python coding challenges**.
+
+        **Timing and Structure:**
+        - You will be **timed automatically** as soon as you click "Start Task" on the task tabs.
+        - You have **one attempt** to submit your code for each task.
+        - Take as long as you need, but note that the timer only stops once you submit the task.
+        - **Task 2 will unlock only after Task 1 is completed**. Feel free to take a break between tasks.
+
+        Please complete the tasks as you naturally would under these conditions.
         """)
+
+        # Slider to mark confidence level in python coding.
+        st.write("How confident are you at writing Python code?")
+        coding_confidence = st.slider("0 being extremely **unconfident** and 5 being extremely **confident**.", 0, 5, 1)
+        st.write(f"I mark my Python coding confidence at {coding_confidence} out of 5.")
 
 #################################### Task 1 ##############################################
     
@@ -72,8 +85,8 @@ def main():
                     st.error(f"Your answer: {st.session_state.task1_user_result}. Correct answer: {st.session_state.task1_correct_result}.")
 
             # Other information shown to participants regarding tasks.
-            st.info(f"Thank you for completing Task 1 (time taken: {st.session_state.task1_duration:.2f} seconds), please take a short break and move onto Task 2. Remember the use of any external tools is **strictly prohibited** in Task 2.")
-            st.warning("Task 1 is now locked, please move on to Task 2.")
+            st.info(f"Thank you for completing Task 1 (time taken: {st.session_state.task1_duration:.2f} seconds), please take a short break and then move onto Task 2.")
+            st.warning("Task 1 is now locked.")
             
         # Information shown to participants once Task 1 is started.
         elif st.session_state.task1_started:
@@ -88,11 +101,11 @@ def main():
 
             # Task 1 information.
             st.subheader("Count how many times the speed increases by more than 30 units compared to the previous reading.")
-            with st.expander("Click here for more info."):
+            with st.expander("Click here for more information."):
                 st.write("""
             Use the box below to:
             
-            Step 1. Read each line and extract time stamp and speed.
+            Step 1. Read each line and extract speed.
             
             Step 2. Compare each speed to the previous one. 
             
@@ -100,13 +113,16 @@ def main():
             """)
               
             # Form to record participants answer.
-            with st.form(key="a_task_1_form"):
+            with st.form(key="b_task_1_form"):
                 # Logging Task 1 answer.
                 task1_answer = st.text_area("Enter Python Code Here")
                 # Generating submit button.
                 submit_button1 = st.form_submit_button(label="Submit")
 
+            # Important reminders for participants.
             st.write("You only get **ONE ATTEMPT** at submitting your code. Please read through it carefully.")
+            st.write("**INDENTATION MATTERS** write this code as you would any other Python code.")
+            st.write("Assign your answer to the variable name 'result', e.g. **result = YOUR_ANSWER**.")
             
             if submit_button1:
                 # Logging Task 1 end time.
@@ -145,22 +161,31 @@ def main():
                 # Logging Task 1 as complete.
                 st.session_state.task1_complete = True
                 # Rerunning the code so that new information is shown to participants.
-                st.experimental_rerun()
+                st.rerun()
 
         # What participants see before having access to Task 1.
         else:
             # Information for participants regarding Task 1.
-            st.write("Introduce participants to task 1 conditions. You only get 1 attempt at submitting code.")
+            st.write("""
+            ### Conditions
+
+            -  **DO NOT** use external tools, such as ChatGPT. The use of external tools is **strictly prohibited**.
+            - The task will load and you will be **timed automatically** as soon as you click "Start Task".
+            - You have **one attempt** to submit your code.
+            - Take as long as you need, but note that the timer only stops when you hit "Submit".
+
+            When you are ready, please click "Start Task".
+            """)
 
             # Form to record participants understand Task 1 rules.
-            with st.form(key="a_info_1_form"):
+            with st.form(key="b_info_1_form"):
                 info1_submit = st.form_submit_button(label="Start Task.")
 
             if info1_submit:
                 # Logging Task 1 as started.
                 st.session_state.task1_started = True
-                # Rerunning the code so that participants have access to Task 1
-                st.experimental_rerun()
+                # Rerunning the code so that participants have access to Task 1.
+                st.rerun()
 
 ########################################## Task 2 #############################################            
             
@@ -182,8 +207,8 @@ def main():
                     st.error(f"Your answer: {st.session_state.task2_user_result}. Correct answer: {st.session_state.task2_correct_result}.")
             
             # Other information shown to participants regarding tasks.
-            st.info(f"Thank you for completing Task 2 (time taken: {st.session_state.task2_duration:.2f}). You may now proceed to the debrief tab.")
-            st.warning("Task 2 is now locked, please move on to the debrief.")
+            st.info(f"Thank you for completing Task 2 (time taken: {st.session_state.task2_duration:.2f} seconds). You may now proceed to the debrief tab.")
+            st.warning("Task 2 is now locked.")
 
         # Information shown to participants once Task 2 is started.
         elif st.session_state.task2_started:
@@ -198,7 +223,7 @@ def main():
 
             # Task 2 information.
             st.subheader("Find the longest continuous segment where speed strictly increases at each step. Then return the total time duration of that segment (in seconds).")
-            with st.expander("Click here for more info."):
+            with st.expander("Click here for more information."):
                 st.write("""
             Use the box below to:
 
@@ -212,13 +237,16 @@ def main():
             """)
                 
             # Form to record participants answer.
-            with st.form(key="a_task_2_form"):
+            with st.form(key="b_task_2_form"):
                 # Logging Task 2 answer.
                 task2_answer = st.text_area("Enter Python Code Here")
                 # Generating submit button.
                 submit_button2 = st.form_submit_button(label="Submit")
 
+            # Important reminders for participants.
             st.write("You only get **ONE ATTEMPT** at submitting your code. Please read through it carefully.")
+            st.write("**INDENTATION MATTERS** write this code as you would any other Python code.")
+            st.write("Assign your answer to the variable name 'result', e.g. **result = YOUR_ANSWER**.")
             
             if submit_button2:
                 # Logging Task 2 end time.
@@ -229,62 +257,86 @@ def main():
                 )
 
                 # Calculating correct answer.
+                # Converting columns to lists.
                 speeds = df["Speed"].tolist()
                 timestamps = df.index.tolist()
+                # Initialising variable to store the longest duration of increasing speeds.
                 max_duration = 0
+                # Starting index of current increasing sequence.
                 start = 0
 
+                # Looping through the speeds starting from second item.
                 for i in range(1, len(speeds)):
                     if speeds[i] > speeds[i - 1]:
+                        # If current speed is higher than the previous, continue sequence.
                         continue
                     else:
+                        # Calculating duration of the next increasing sequence if current sequence breaks (speed doesnt increase).
                         duration = timestamps[i - 1] - timestamps[start]
+                        # Updating max_duration if this one is longer.
                         if duration > max_duration:
                             max_duration = duration
+                        # Resetting the start index if this one is longer.
                         start = i
                 # Final check after loop.
                 duration = timestamps[-1] - timestamps[start]
                 if duration > max_duration:
                     max_duration = duration
 
+                # Running participants code and extracting results.
                 try:
                     # Isolating participants results.
+                    # Dictionary to store variables from participants code.
                     local_vars = {}
+                    # Executing the submitted Task 2 code safely.
                     exec(task2_answer, {}, local_vars)
+                    # Retrieving the participants result from code.
                     user_result = local_vars.get("result", None)
 
                     # Storing results in session state variables.
                     st.session_state.task2_user_result = user_result
                     st.session_state.task2_correct_result = max_duration
+                    # Checking if participants results match correct answer.
                     st.session_state.task2_success = (user_result == max_duration)
 
                 # Catching any errors in the participants code.
                 except Exception as e:
+                    # No result if theres an error.
                     user_result = None
+                    # Storing error message and marking task as unsuccessful.
                     st.session_state.task2_user_result = f"Error: {e}"
                     st.session_state.task2_correct_result = max_duration
                     st.session_state.task2_success = False
-                    
+                
                 # Logging Task 2 as complete.
                 st.session_state.task2_complete = True
                 # Rerunning the code so that new information is shown to participants.
-                st.experimental_rerun()
+                st.rerun()
 
         # What participants see before having acces to Task 2.
         if st.session_state.task1_complete and not st.session_state.task2_complete and not st.session_state.task2_started:
             
             # Information for participants regarding Task 2.
-            st.write("Introduce participants to task 2 conditions.")
+            st.write("""
+            ### Conditions
+
+            -  **DO NOT** use external tools, such as ChatGPT. The use of external tools is **strictly prohibited**.
+            - The task will load and you will be **timed automatically** as soon as you click "Start Task".
+            - You have **one attempt** to submit your code.
+            - Take as long as you need, but note that the timer only stops when you hit "Submit".
+
+            When you are ready, please click "Start Task".
+            """)
             
             # Form to record participants understand Task 2 rules.
-            with st.form(key="a_info_2_form"):
+            with st.form(key="b_info_2_form"):
                 info2_submit = st.form_submit_button(label="Start Task.")
 
             if info2_submit:
                 # Logging Task 2 as started.
                 st.session_state.task2_started = True
-                # Rerunning the code so that participants have access to Task 1
-                st.experimental_rerun()
+                # Rerunning the code so that participants have access to Task 2.
+                st.rerun()
             
 ############################################# Debrief ###############################################
                 
@@ -298,7 +350,15 @@ def main():
         # Debrief information shown to participants once Task 2 is complete.
         else:
             st.write("""
-            Debrief statement: Thank you for participating in this stage of the study. Please follow the link to the final survey, this will only take 5-10 minutes of your time. Please copy your ID number and save it for the start of the survey. [link to final survey].
+            Thank you for taking part in this stage of the study!
+
+            Please follow the link below to complete a short final survey (5-10 minutes).
+            
+            **Remember you will need your memorable word for the final survey.**
+ 
+            https://forms.cloud.microsoft/e/TYEie8Dr6K
+
+            Once again, thank you for your time and participation!
             """)
 
 ############################################### End #################################################
