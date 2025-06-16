@@ -3,6 +3,53 @@ import streamlit as st
 import numpy as np 
 import pandas as pd
 import time
+import os
+import csv
+
+# Saving data function.
+
+def save_task_dat():
+    """
+    Saves participant data to a csv file.
+
+    This function collects relevant information from streamlits session state, creates a DataFrame with the data, and appends it to 'participant_data.csv'.
+
+    If the file doesnt exist, it creates a new one with headers.
+    """
+    # Getting participants memorable word, "unknown" if not entered.
+    memorable_word = st.session_state.get("ID_input", "unknown")
+    # Participants on this page are in Group A.
+    group = "A"
+    # Retrieving the participants coding confidence.
+    confidence = st.session_state.get("coding_confidence", None)
+    # Getting the time taken to complete Task 1.
+    task1_time = st.session_state.get("task1_duration", None)
+    # Converting Task 1 success to a binary result (1 for correct, 0 for incorrect or error).
+    task1_result = 1 if st.session_state.get("task1_success", False) else 0
+    # Retrieving Task 2 time.
+    task2_time = st.session_state.get("task2_duration", None)
+    # Retrieving Task 2 score.
+    task2_result = 1 if st.session_state.get("task2_success", False) else 0
+
+    # Organising data into a dictionary.
+    data = {
+        "memorable_word": memorable_word,
+        "group": group,
+        "confidence": confidence,
+        "task1_time": task1_time,
+        "task1_result": task1_result,
+        "task2_time": task2_time,
+        "task2_result": task2_result
+    }
+    # Creating single row DataFrame.
+    task_dat = pd.DataFrame([data])
+    # Defining the csv filename.
+    filename = "participant_data.csv"
+    # Appending to the file if it exists, or creating the file if it does not exist.
+    if os.path.exists(filename):
+        task_dat.to_csv(filename, mode='a', header=False, index=False)
+    else:
+        task_dat.to_csv(filename, mode='w', header=True, index=False)
 
 # Intialising main function.
 
@@ -68,6 +115,13 @@ def main():
         st.write("How confident are you at writing Python code?")
         coding_confidence = st.slider("0 being extremely **unconfident** and 5 being extremely **confident**.", 0, 5, 1)
         st.write(f"I mark my Python coding confidence at {coding_confidence} out of 5.")
+        
+        # For csv file.
+        if st.button("Save confidence level."):
+            # Storing the current value of coding_confidence in the session state.
+            st.session_state.coding_confidence = coding_confidence 
+            # Displaying success message to confirm value was saved.
+            st.success("Confidence level saved!")
 
 #################################### Task 1 ##############################################
     
@@ -360,6 +414,14 @@ def main():
 
             Once again, thank you for your time and participation!
             """)
+            # Checking if "results_saved" session state is set.
+            if not st.session_state.get("results_saved", False):
+                # Calling the function to save task data.
+                save_task_dat()
+                # Setting "results_saved" to True to avoid re-saving.
+                st.session_state.results_saved = True
+                # Showing a success message to participants.
+                st.success("Your responses have been saved successfully!")
 
 ############################################### End #################################################
 

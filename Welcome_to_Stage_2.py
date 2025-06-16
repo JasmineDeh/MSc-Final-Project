@@ -32,7 +32,6 @@ Once you've submitted your memorable word you will be assigned to a task group.
 
 """)
 
-
 # Form to record participants ID number.
 with st.form("ID_form"):
     # Logging ID number.
