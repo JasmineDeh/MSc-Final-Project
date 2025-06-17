@@ -58,12 +58,9 @@ def save_task_dat():
     ]
     st.write("saving row:", row)
     
-    try:
-        # Appending new row to Google Sheet
-        sheet.append_row(row)
-        st.success("Your responses have been saved successfully!")
-    except Exception as e:
-        st.error(f"Failed to save data: {e}")
+    # Appending new row to Google Sheet
+    sheet.append_row(row)
+    st.success("Your responses have been saved successfully!")
     
 # Intialising main function.
 
@@ -445,8 +442,6 @@ def main():
                 save_task_dat()
                 # Setting "results_saved" to True to avoide re-saving.
                 st.session_state.results_saved = True
-                # Showing a success message to participants.
-                st.success("Your responses have been saved successfully!")
 
 
 ############################################### End #################################################
