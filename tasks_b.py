@@ -1,25 +1,41 @@
 # Importing required modules.
+import json
+import gspread
 import streamlit as st
+from oauth2client.service_account import ServiceAccountCredentials
 import numpy as np 
 import pandas as pd
 import time
-import os
-import csv
+
+# Authenticating google sheets file for remote data saving.
+
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+
+# Loading credentials from Streamlit secrets.
+creds_dict = st.secrets["gcp_service_account"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(dict(creds_dict), scope)
+client = gspread.authorize(creds)
+
+# Trying to open sheet.
+spreadsheet = client.open("participant_data")
+sheet = spreadsheet.sheet1
+
 
 # Saving data function.
 
 def save_task_dat():
     """
-    Saves participant data to a csv file.
+    Saves participant data to a Google Sheet.
 
-    This function collects relevant information from streamlits session state, creates a DataFrame with the data, and appends it to 'participant_data.csv'.
-
-    If the file doesnt exist, it creates a new one with headers.
+    This function collects relevant information from streamlits session state, creates list with the data, and saves it to the Google Sheet.
     """
     # Getting participants memorable word, "unknown" if not entered.
     memorable_word = st.session_state.get("ID_input", "unknown")
-    # Participants on this page are in Group A.
-    group = "A"
+    # Participants on this page are in Group B.
+    group = "B"
     # Retrieving the participants coding confidence.
     confidence = st.session_state.get("coding_confidence", None)
     # Getting the time taken to complete Task 1.
@@ -31,25 +47,26 @@ def save_task_dat():
     # Retrieving Task 2 score.
     task2_result = 1 if st.session_state.get("task2_success", False) else 0
 
-    # Organising data into a dictionary.
-    data = {
-        "memorable_word": memorable_word,
-        "group": group,
-        "confidence": confidence,
-        "task1_time": task1_time,
-        "task1_result": task1_result,
-        "task2_time": task2_time,
-        "task2_result": task2_result
-    }
-    # Creating single row DataFrame.
-    task_dat = pd.DataFrame([data])
-    # Defining the csv filename.
-    filename = "participant_data.csv"
-    # Appending to the file if it exists, or creating the file if it does not exist.
-    if os.path.exists(filename):
-        task_dat.to_csv(filename, mode='a', header=False, index=False)
-    else:
-        task_dat.to_csv(filename, mode='w', header=True, index=False)
+    # Organising data into a list to match sheet columns.
+    row = [
+        memorable_word,
+        group,
+        confidence,
+        task1_time,
+        task1_result,
+        task2_time,
+        task2_result
+    ]
+
+    st.write("saving row:", row)
+    
+    try:
+        # Appending new row to Google Sheet
+        sheet.append_row(row)
+        st.success("Your responses have been saved successfully!")
+    except Exception as e:
+        st.error(f"Failed to save data: {e}")
+    
 
 # Intialising main function.
 
