@@ -56,7 +56,6 @@ def save_task_dat():
         task2_time,
         task2_result
     ]
-    st.write("saving row:", row)
     
     # Appending new row to Google Sheet
     sheet.append_row(row)
