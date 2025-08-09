@@ -163,6 +163,17 @@ def main():
             st.subheader("Time Stamped Speed Data:")
             st.dataframe(df)
 
+            # Convert DataFrame to CSV
+            csv = df.to_csv(index=False)
+
+            # Download button
+            st.download_button(
+                label="Download data as CSV",
+                data=csv,
+                file_name="time_stamped_speed_data.csv",
+                mime="text/csv"
+            )
+
             # Task 1 information.
             st.subheader("Count how many times the speed increases by more than 30 units compared to the previous reading.")
             with st.expander("Click here for more information."):
@@ -246,6 +257,7 @@ def main():
 
             - The use of ChatGPT is **encouraged**.
             - The task will load and you will be **timed automatically** as soon as you click "Start Task".
+            - You may find it easier to download the data and complete the code in a different window.
             - You have **one attempt** to submit your code.
             - Take as long as you need, but note that the timer only stops when you hit "Submit".
 
@@ -295,6 +307,7 @@ def main():
             # Displaying data required for tasks.
             st.subheader("Time Stamped Speed Data:")
             st.dataframe(df)
+            st.write("This is the same dataset downloaded for Task 1.")
 
             # Task 2 information.
             st.subheader("Find the longest continuous segment where speed strictly increases at each step. Then return the total time duration of that segment (in seconds).")
@@ -397,6 +410,7 @@ def main():
 
             -  **DO NOT** use external tools, such as ChatGPT. The use of external tools is **strictly prohibited**.
             - The task will load and you will be **timed automatically** as soon as you click "Start Task".
+            - You may find it easier to download the data and complete the code in a different window.
             - You have **one attempt** to submit your code.
             - Take as long as you need, but note that the timer only stops when you hit "Submit".
 
