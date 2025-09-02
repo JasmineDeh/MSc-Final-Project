@@ -29,8 +29,8 @@ This directory contains the code for **Stage 2** of the study, where participant
 1. **Clone the Repository**
 
    ```bash
-   clone
-   cd
+   git clone https://github.com/JasmineDeh/MSc-Final-Project.git
+   cd MSc-Final-Project
    ```
 
 2. **Dependencies**
