@@ -1,3 +1,49 @@
+"""
+Stage 2 / Group A Streamlit Coding Task App
+
+This script implements the interactive Group A coding task interface for participants
+in the generative AI cognitive impact study. Participants complete two timed Python
+tasks, record confidence levels, and submit results, which are saved to a Google Sheet.
+
+Functionality:
+
+1. Google Sheets Authentication:
+   - Authenticates access to a remote Google Sheet using service account credentials
+     stored in Streamlit secrets.
+   - Provides `save_task_dat()` function to append participant task data to the sheet.
+
+2. Session Initialisation:
+   - Initialises Streamlit session state variables for tracking task progress, timing, 
+     and completion status for Task 1 and Task 2.
+   - Generates a sample DataFrame for use in tasks (time-stamped speed data).
+
+3. Introduction Tab:
+   - Presents study instructions and task overview.
+   - Collects participant self-rated Python coding confidence via slider.
+   - Saves confidence level to session state.
+
+4. Task 1 Tab:
+   - Provides time-stamped speed dataset for analysis.
+   - Participants complete a Python coding challenge:
+       - Count the number of times speed increases by more than 30 units.
+       - Submit code in a single attempt; assign result to variable `result`.
+   - Task 1 is timed automatically.
+   - Validates participant submission and stores result and success status in session state.
+
+5. Task 2 Tab:
+   - Unlocks only after Task 1 is complete.
+   - Participants complete a second Python coding challenge:
+       - Identify the longest strictly increasing speed segment and compute its duration.
+       - Submit code in a single attempt; assign result to variable `result`.
+   - Task 2 is timed automatically.
+   - Validates participant submission and stores result and success status in session state.
+
+6. Debrief Tab:
+   - Displays study debrief and final survey link.
+   - Automatically saves participant task data to Google Sheet upon completion of Task 2.
+   
+"""
+
 # Importing required modules.
 import json
 import gspread

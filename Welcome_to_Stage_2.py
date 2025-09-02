@@ -1,3 +1,38 @@
+"""
+Stage 2 Streamlit App for Generative AI Study
+
+This script implements the interactive Stage 2 task interface for participants
+in the generative AI cognitive impact study. Participants are automatically
+assigned to one of two task groups (A or B) and work through tasks based on
+their assigned group.
+
+Functionality:
+
+1. Session Initialisation:
+   - Assigns a unique participant number if not already present in the session state.
+   - Stores participant information for the session.
+
+2. Welcome Introduction:
+   - Displays instructions and context for Stage 2.
+   - Guides participants to enter their memorable word from Stage 1.
+
+3. Participant Identification:
+   - Collects the participant's memorable word through a Streamlit form.
+   - Stores submission state to control task assignment.
+
+4. Task Group Assignment:
+   - Participants with even session numbers are assigned to Group A.
+   - Participants with odd session numbers are assigned to Group B.
+   - Calls the corresponding task module (`tasks_a` or `tasks_b`) to start the tasks.
+
+
+
+Run the app via terminal:
+
+  streamlit run Welcome_to_Stage_2.py
+
+"""
+
 # Importing required modules.
 import streamlit as st
 import random
